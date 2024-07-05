@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MP3 Player</title>
+    <style>
+        .song {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Song List</h1>
+    <div>
+        <audio id="audioPlayer" controls>
+            <source id="audioSource" src="" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <button onclick="prevSong()">Previous</button>
+        <button onclick="nextSong()">Next</button>
+    </div>
+    <ul id="playlist">
+        {% for song in songs %}
+            <li class="song" data-src="{{ song.file.url }}">
+                {{ song.title }} - {{ song.artist }}
+            </li>
+        {% endfor %}
+    </ul>
+    <script>
+        var currentSongIndex = 0;
+        var playlist = document.getElementById('playlist').getElementsByTagName('li');
+        var audioPlayer = document.getElementById('audioPlayer');
+        var audioSource = document.getElementById('audioSource');
+
+        function loadSong(index) {
+            if (index >= 0 && index < playlist.length) {
+                audioSource.src = playlist[index].getAttribute('data-src');
+                audioPlayer.load();
+                audioPlayer.play();
+                currentSongIndex = index;
+            }
+        }
+
+        function prevSong() {
+            loadSong(currentSongIndex - 1);
+        }
+
+        function nextSong() {
+            loadSong(currentSongIndex + 1);
+        }
+
+        // Load the first song on page load
+        loadSong(currentSongIndex);
+    </script>
+</body>
+</html>
